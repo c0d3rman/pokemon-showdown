@@ -1300,15 +1300,8 @@ export class Pokemon {
 		this.knownType = true;
 		this.weighthg = species.weighthg;
 
-		const baseStats: StatsTable = this.species.baseStats;
-		if (this.set.customBaseStats) {
-			let statName: keyof SparseStatsTable;
-			for (statName in this.set.customBaseStats) {
-				baseStats[statName] = this.set.customBaseStats[statName]!;
-			}
-		}
-		const stats = this.battle.spreadModify(baseStats, this.set);
-		if (!this.set.customBaseStats?.hp && this.species.maxHP) stats.hp = this.species.maxHP;
+		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
+		if (this.species.maxHP) stats.hp = this.species.maxHP;
 
 		if (!this.maxhp) {
 			this.baseMaxhp = stats.hp;

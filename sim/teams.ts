@@ -108,10 +108,6 @@ export interface PokemonSet {
 	 * Tera Type
 	 */
 	teraType?: string;
-	/**
-	 * Custom base stats
-	*/
-	customBaseStats?: SparseStatsTable;
 }
 
 export const Teams = new class Teams {
@@ -144,17 +140,6 @@ export const Teams = new class Teams {
 
 			// nature
 			buf += '|' + (set.nature || '');
-
-			// custom base stats
-			let customBaseStats = '|';
-			if (set.customBaseStats) {
-				customBaseStats = '|' + (set.customBaseStats['hp'] || '') + ',' + (set.customBaseStats['atk'] || '') + ',' + (set.customBaseStats['def'] || '') + ',' + (set.customBaseStats['spa'] || '') + ',' + (set.customBaseStats['spd'] || '') + ',' + (set.customBaseStats['spe'] || '');
-			}
-			if (customBaseStats === '|,,,,,') {
-				buf += '|';
-			} else {
-				buf += customBaseStats;
-			}
 
 			// evs
 			let evs = '|';
@@ -278,22 +263,6 @@ export const Teams = new class Teams {
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.nature = this.unpackName(buf.substring(i, j), Dex.natures);
-			i = j + 1;
-
-			// custom base stats
-			j = buf.indexOf('|', i);
-			if (j < 0) return null;
-			if (j !== i) {
-				const customBaseStats = buf.substring(i, j).split(',', 6);
-				set.customBaseStats = {
-					hp: Number(customBaseStats[0]) || 0,
-					atk: Number(customBaseStats[1]) || 0,
-					def: Number(customBaseStats[2]) || 0,
-					spa: Number(customBaseStats[3]) || 0,
-					spd: Number(customBaseStats[4]) || 0,
-					spe: Number(customBaseStats[5]) || 0,
-				};
-			}
 			i = j + 1;
 
 			// evs
@@ -554,17 +523,6 @@ export const Teams = new class Teams {
 			if (natureIndex === -1) return;
 			line = line.substr(0, natureIndex);
 			if (line !== 'undefined') set.nature = line;
-		} else if (line.startsWith('Base stats: ')) {
-			line = line.slice(12);
-			const statLines = line.split('/');
-			set.customBaseStats = {};
-			for (const statLine of statLines) {
-				const [statValue, statName] = statLine.trim().split(' ');
-				const statid = Dex.stats.getID(statName);
-				if (!statid) continue;
-				const value = parseInt(statValue);
-				set.customBaseStats[statid] = value;
-			}
 		} else if (line.startsWith('-') || line.startsWith('~')) {
 			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
 			if (line.startsWith('Hidden Power [')) {
