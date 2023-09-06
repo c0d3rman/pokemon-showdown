@@ -22,6 +22,12 @@ export interface SpeciesData extends Partial<Species> {
 }
 
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
+export interface CustomSpeciesData extends Partial<Omit<Species, 'baseStats'>> {
+	ancestor: string;
+	types?: string[];
+	abilities?: SpeciesAbility;
+	baseStats?: SparseStatsTable;
+}
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;

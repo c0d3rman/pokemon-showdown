@@ -163,6 +163,7 @@ type Ability = import('./dex-abilities').Ability;
 
 type SpeciesData = import('./dex-species').SpeciesData;
 type ModdedSpeciesData = import('./dex-species').ModdedSpeciesData;
+type CustomSpeciesData = import('./dex-species').CustomSpeciesData;
 type SpeciesFormatsData = import('./dex-species').SpeciesFormatsData;
 type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData;
 type LearnsetData = import('./dex-species').LearnsetData;
@@ -420,6 +421,7 @@ interface PlayerOptions {
 	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
+	customMons?: CustomSpeciesData[] | null;
 }
 
 interface TextObject {

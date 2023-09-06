@@ -560,6 +560,25 @@ export class ModdedDex {
 		this.formats.load();
 		return this;
 	}
+
+	addCustomMon(name: string, monData: CustomSpeciesData) {
+		const ancestor = this.dataCache!.Pokedex[monData.ancestor.valueOf()];
+		if (!ancestor) {
+			return;
+		}
+		const mon = this.deepClone(ancestor);
+		mon.name = name;
+		mon.num = -1; // TODO is this OK?
+
+		if (monData.baseStats) {
+			for (const stat in mon.baseStats) {
+				if (stat in monData.baseStats) {
+					mon.baseStats[stat] = monData.baseStats[stat as StatID];
+				}
+			}
+		}
+		this.dataCache!.Pokedex[this.toID(mon.name)] = mon;
+	}
 }
 
 dexes['base'] = new ModdedDex();

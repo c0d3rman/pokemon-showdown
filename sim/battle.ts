@@ -2993,6 +2993,14 @@ export class Battle {
 		let side;
 		let didSomething = true;
 		const slotNum = parseInt(slot[1]) - 1;
+		
+		// ingest custom mons if present
+		if (options.customMons) {
+			for (let i = 0; i < options.customMons!.length; i++) {
+				const monData: CustomSpeciesData = options.customMons![i];
+				this.dex.addCustomMon(`custom-${slot}-n${i+1}`, monData);
+			}
+		}
 		if (!this.sides[slotNum]) {
 			// create player
 			const team = this.getTeam(options);
